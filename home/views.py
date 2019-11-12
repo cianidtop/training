@@ -1,7 +1,11 @@
 from django.shortcuts import render
+from .models import Post
 
 def main(request):
-    return render(request, 'home/main.html')
+    data = {
+        'news': Post.objects.all()
+    }
+    return render(request, 'home/main.html', data)
 
 def price(request):
     return render(request, 'home/price.html')
