@@ -2,10 +2,13 @@
 {% block main_section %}
     {% for post in news %}
     <div class="alert alert-light">
-        <img src=" {{ post.image.url }} ">
+        <img id="postimg" src=" {{ post.image.url }} ">
         <h1>{{ post.title }}</h1>
         <p>{{ post.text }}</p>
-        <span class="text-muted">Публикация: {{ post.date }}</span>
+        <span class="text-muted">Публикация: {{ post.date|date:"j F Y, время: H:i:s" }}</span>
     </div>
     {% endfor %}
 {% endblock main_section %}
+
+{% block footer_section %}
+{% endblock footer_section %}
