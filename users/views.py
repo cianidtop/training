@@ -1,14 +1,26 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth.forms import UserCreationForm
+from .forms import Userprofile, UserForms
+from django.http import HttpResponseRedirect,HttpResponse
+from django.contrib.auth import authenticate,login,logout
+from django.contrib.auth.decorators import login_required
 
 def register(request):
+
+    registered = False
+
     if request.method == "POST":
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            username = form.cleaned_data.get('username')
+        user_form = UserForms(request.POST)
+        profile_form = Userprofile(request.POST)
+        if user_form.is_valid() and profile_form.is_valid():
+            user = user_form.save()  # save info in database
+            user.set_password(user.password)
+            user.save()
+
+            profile = profile_form.save(commit=False)
+            profile.user = user  # one to one relatonship
             return redirect('home-main')
     else:
-            form = UserCreationForm()
-    form = UserCreationForm()
-    return render(request, 'users/registration.html', {'form': form, 'title': 'Регистрация пользователя'})
+            user_form = UserForms()
+            profile_form = Userprofile()
+    return render(request, 'users/registration.html', {'user_form':user_form,'profile_form':profile_form,'registered':registered})
+
